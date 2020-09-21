@@ -14,7 +14,7 @@ let car, wheel, background, angle, LR;
 car = {};
 
 car.image = new Image();
-car.image.src = "images/car.png"
+car.image.src = "images/car.png";
 
 car.pos = 0;
 car.speed = 0;
