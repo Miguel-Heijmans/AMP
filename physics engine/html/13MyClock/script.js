@@ -42,21 +42,25 @@ function animate()
     console.log(hours,minutes,seconds);
     context.drawImage(Clock,0,0)
 
-    context.save();
-    context.translate(Clock.width / 2,Clock.height / 2);
-    context.rotate(HourHand * 2 * Math.PI / 12);
-    context.drawImage(HourHand, -HourHand.width / 2, -HourHand.height)
-    context.restore();
+    
 
-    context.save();
-    context.translate(Clock.width / 2,Clock.height / 2);
-    context.rotate(minutes * 2 * Math.PI / 60);
-    context.drawImage(MinuteHand, -MinuteHand.width / 2, -MinuteHand.height)
-    context.restore();
+    
 
     context.save();
     context.translate(Clock.width / 2,Clock.height / 2);
     context.rotate(seconds * 2 * Math.PI / 60);
     context.drawImage(SecondHand, -SecondHand.width / 2,-SecondHand.height)
+    context.restore();
+
+    context.save();
+    context.translate(Clock.width / 2, Clock.height / 2);
+    context.rotate(minutes * 2 * Math.PI / 60);
+    context.drawImage(MinuteHand, -MinuteHand.width / 2, -MinuteHand.height)
+    context.restore();
+
+    context.save();
+    context.translate(Clock.width / 2, Clock.height / 2);
+    context.rotate(HourHand * 2 * Math.PI/ 12+minutes / 720);
+    context.drawImage(HourHand, -HourHand.width / 2, -HourHand.height)
     context.restore();
 }
