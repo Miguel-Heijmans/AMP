@@ -11,7 +11,7 @@
 class Point
 {
 
-	constructor(pos,radius,color,draggable, label)
+	constructor(pos, radius, color, draggable, label)
 	{
 		this.pos = pos;
 		this.radius = radius;
@@ -77,7 +77,7 @@ class Point
 		})
 	}
 
-	draw(context)
+	draw()
 	{
 		context.beginPath();
 		context.lineWidth = "5";
