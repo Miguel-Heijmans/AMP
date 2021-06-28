@@ -1,99 +1,99 @@
-/*
-	23-2-2020
-	klasse om punten op de 2d context van een canvas te tekenen
+class Point {
+  constructor(pos, radius, color, label, draggable) {
+    this.pos = pos;
+    this.radius = radius;
+    this.color = color;
+    this.label = label || "";
+    this.offset = 0;
+    this.draggable = draggable || false;
+    if (this.draggable) {
+      console.log("testing");
+      this.drag();
+    }
 
-	eigenschappen
-	* pos (positie van het middelpunt m.b.v. een Vector2d)
-	* radius (grootte van de cirkel in pixels)
-	* color (kleur van het punt, als String)
-*/
+    this.boxed = false;
+  }
 
-class Point
-{
+  SetBoxed(bool){
+    this.boxed = bool;
+  }
 
-	constructor(pos, radius, color, draggable, label)
-	{
-		this.pos = pos;
-		this.radius = radius;
-		this.color = color;
-		this.draggable = draggable || false;
+  SetNavbarOffset(offset){
+    this.offset = offset;
+  }
 
-		if (draggable)
-		{
-			this.drag();
-		}
-		this.label = label || "";
-	}
+  draw() {
+    context.beginPath();
+    context.strokeStyle = "black";
+    context.fillStyle = this.color;
+    context.arc(this.pos.dx, this.pos.dy, this.radius, 0, 2 * Math.PI);
+    context.stroke();
+    context.fill();
+    context.closePath();
+    context.fillStyle = "black";
+    context.font = "12px Arial";
+    context.fillText(this.label, this.pos.dx - 20, this.pos.dy - this.radius - 10);
+  }
 
-	get vPos()
-	{
-		return new Vector2d(this.pos.dx, this.pos.dy);
-	}
+  distance(P){
+    let dx = P.pos.dx - this.pos.dx;
+    let dy = P.pos.dy - this.pos.dy;
+    return Math.sqrt(dx*dx+dy*dy);
+  };
 
-	set vPos(vector)
-	{
-		this.pos.dx = vector.dx;
-        this.pos.dy = vector.dy;
-	}
+  update(vel, acc){
+    vel.sumVector(vel,acc)
+    this.pos.sumVector(this.pos,vel);
+    if(this.pos.dy > height - this.radius && this.boxed){
+      vel.dy = -vel.dy;
+      this.pos.dy = height-this.radius;
+    }
+    if(this.pos.dy<this.radius && this.boxed){
+      vel.dy = -vel.dy;
+      this.pos.dy = this.radius;
+    }
 
-	drag()
-	{
-		let mouse = {};
-		let distance;
-		let dragging = false;
-
-		addEventListener('mousedown',(evt)=>
-		{
-			mouse.x = evt.clientX;
-			mouse.y = evt.clientY;
-
-			let dx = this.pos.dx - mouse.x;
-			let dy = this.pos.dy - mouse.y;
-			distance = Math.sqrt(dx*dx + dy*dy);
-
-			if(distance < this.radius)
-			{
-				dragging = true;
-			}
-			else
-			{
-				dragging = false;
-			}
-		})
+    if(this.pos.dx>width-this.radius && this.boxed){
+      vel.dx = -vel.dx;
+      this.pos.dx = width-this.radius;
+    }
+    if(this.pos.dx<this.radius && this.boxed){
+      vel.dx = -vel.dx;
+      this.pos.dx = this.radius;
+    }
+  }
 
 
-		addEventListener('mousemove', (evt)=>
-		{
-			if(dragging)
-			{
-				this.pos.dx = evt.clientX;
-				this.pos.dy = evt.clientY;
-			}
-		})
 
-		addEventListener('mouseup', (evt)=>
-		{
-			dragging = false;
-		})
-	}
+  drag() {
+    console.log("drawable");
 
-	draw()
-	{
-		context.beginPath();
-		context.lineWidth = "5";
-		context.fillStyle = this.color;
-		context.arc(this.pos.dx, this.pos.dy, this.radius, 0, 2 * Math.PI);
-		context.font = "20px Comic Sans MS";
-		context.fillText(this.label, this.pos.dx - this.radius, this.pos.dy - this.radius);
-		context.closePath();
-		context.stroke();
-		context.fill();
-	}
+    this.dragging;
+    addEventListener("mousemove", (e) => {
+      if (this.dragging == true) {
+        this.pos.dx = e.clientX;
+        this.pos.dy = e.clientY - this.offset;
+      }
+    });
 
-	Update(pos, radius, color)
-	{
-		this.pos = pos
-		this.radius = radius;
-		this.color = color;
-	}
+
+    addEventListener("mousedown", (e) => {
+      if (pointInCircle(e.clientX, e.clientY - this.offset, this.pos.dx, this.pos.dy, this.radius)) {
+        this.pos.dx = e.clientX;
+        this.pos.dy = e.clientY - this.offset;
+        this.dragging = true;
+      }
+    });
+
+    addEventListener("mouseup", (e) => {
+      this.dragging = false;
+    });
+
+    function pointInCircle(x, y, cx, cy, radius) {
+      let distancesquared = (x - cx) * (x - cx) + (y - cy) * (y - cy);
+      return distancesquared <= radius * radius;
+    }
+  }
 }
+
+

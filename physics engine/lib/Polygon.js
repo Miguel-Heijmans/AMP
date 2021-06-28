@@ -1,27 +1,20 @@
-class Polygon
-{
-    constructor(points1x,points1y,points2x,points2y,points3x,points3y)
-    {
-        this.points1x = points1x;
-        this.points1y = points1y;
-        this.points2x = points2x;
-        this.points2y = points2y;
-        this.points3x = points3x;
-        this.points3y = points3y;
-    }
+class Polygon {
+  constructor(points, color) {
+    this.points = points;
+    this.color = color;
+  }
 
-    draw(context)
-    {
-        console.log(this.points, this.color);
-        console.log(getRandomColor());
-        context.beginPath();
-        context.lineWidth = "5";
-        context.fillStyle = getRandomColor();
-        context.moveTo(this.points1x, this.points1y);
-        context.lineTo(this.points2x, this.points2y);
-        context.lineTo(this.points3x, this.points3y);
-        context.closePath();
-        context.fill();
-		context.stroke();
+  draw() {
+    console.log("JA");
+    context.beginPath();
+    context.lineWidth = 0;
+    context.fillStyle = this.color;
+    for (let i = 0; i < this.points; i++) {
+      let random1 = getRandomInt(50, width);
+      let random2 = getRandomInt(50, height);
+      context.lineTo(random1, random2);
+      context.stroke();
+      context.fill();
     }
+  }
 }
